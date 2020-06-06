@@ -1,0 +1,9 @@
+.Buttons
+{
+    -fx-background-color:#c6e5fa;
+    -fx-background-radius: 30;
+}.exit
+{
+    -fx-background-color:#c6e5fa;
+    -fx-background-radius: 20;
+}

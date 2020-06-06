@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<AnchorPane prefHeight="550.0" prefWidth="800.0" style="-fx-background-color: white;" stylesheets="@../sample/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <children>
+           <Text fx:id="text" layoutX="40.0" layoutY="40.0"   />
+           <ListView fx:id="listView" layoutX="80.0" layoutY="60.0" prefHeight="400.0" prefWidth="300.0" />
+           <ListView fx:id="sousList" layoutX="419.0" layoutY="60.0" prefHeight="400.0" prefWidth="300.0" />
+          <Button layoutX="400.0" layoutY="486.0" onAction="#LIST" prefHeight="45.0" prefWidth="94.0" styleClass="Buttons" text="list" />
+          <Button layoutX="500.0" layoutY="486.0" mnemonicParsing="false" onAction="#store" prefHeight="45.0" prefWidth="94.0" styleClass="Buttons" text="upload" />
+          <Button layoutX="600.0" layoutY="486.0" mnemonicParsing="false" onAction="#newFold" prefHeight="45.0" prefWidth="94.0" styleClass="Buttons" text="new folder" />
+          <Button layoutX="300.0" layoutY="486.0" mnemonicParsing="false" onAction="#newFiles" prefHeight="45.0" prefWidth="94.0" styleClass="Buttons" text="new file" />
+         <Button layoutX="740.0" layoutY="17.0" mnemonicParsing="false" onAction="#exit" prefHeight="38.0" prefWidth="39.0" styleClass="Buttons" text="Exit" />
+
+        </children>
+    </AnchorPane>
