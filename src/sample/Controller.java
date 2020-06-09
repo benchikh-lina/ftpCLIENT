@@ -1,6 +1,8 @@
 package sample;
 
 import java.awt.*;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
 import java.io.*;
 import java.net.Socket;
 import java.net.URL;
@@ -18,6 +20,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -34,6 +38,12 @@ public class Controller extends Component implements Initializable {
     private static  BufferedWriter writer, writerData;
     public static long restartPoint = 0L;
 
+
+    private final Image IMAGE_RUBY  = new Image("/pictures/file.png");
+    private final Image IMAGE_APPLE  = new Image("pictures/documents.png");
+
+    private Image[] listOfImages = {IMAGE_RUBY, IMAGE_APPLE};
+
     //pour le login recupere le nom quand on va sisait dans le champ username
     @FXML
     public  TextField inpName;
@@ -47,6 +57,9 @@ public class Controller extends Component implements Initializable {
     public   Text error;
 
     //pour les messages d'erreur
+    @FXML
+    public Text text1;
+ //pour les messages de cwd
     @FXML
     public Text text;
 
@@ -120,7 +133,7 @@ public class Controller extends Component implements Initializable {
                 Character.isDigit(reply.charAt(2)) &&
                 reply.charAt(3) == ' '));
 
-         //if the answer don't start with 220 so exit
+        //if the answer don't start with 220 so exit
         if (!reply.startsWith("220")){
             disconnect();
             return false;
@@ -129,7 +142,7 @@ public class Controller extends Component implements Initializable {
         return true;
     }
 
-/*-------------------------------------------------------------------- logout ----------------------------------------*/
+    /*-------------------------------------------------------------------- logout ----------------------------------------*/
 
     public  void disconnect()
     {
@@ -160,19 +173,19 @@ public class Controller extends Component implements Initializable {
         }
     }
 
- // if i want to quit without connecting
+    // if i want to quit without connecting
     public void exit(){
         Platform.exit();
     }
 
-/*-------------------------------- send ----------------------------------------------*/
+    /*-------------------------------- send ----------------------------------------------*/
 //the methode that allow us to send the command to the server
     public static String send(String command)throws IOException
     {
         outputStream.println(command);
         String reply;
         //the answer of the server
-            reply = reader.readLine();
+        reply = reader.readLine();
         return (reply);
     }
 
@@ -201,7 +214,7 @@ public class Controller extends Component implements Initializable {
 
         String reply;
 
-            reply = reader.readLine();
+        reply = reader.readLine();
 
         int response=Integer.parseInt(reply.substring(0, 3));
 
@@ -218,7 +231,7 @@ public class Controller extends Component implements Initializable {
         outputStream.println("TYPE i");
         //the answer
         String reply;
-            reply = reader.readLine();
+        reply = reader.readLine();
 
 
         int response=Integer.parseInt(reply.substring(0, 3));
@@ -228,20 +241,20 @@ public class Controller extends Component implements Initializable {
 
             return false;
         }
-        if (0L != 0) {
-            System.out.println("rest " + 0L);
-            outputStream.println("rest " + 0L);
-            0L = 0;
+        if (restartPoint != 0) {
+            System.out.println("rest " + restartPoint);
+            outputStream.println("rest " + restartPoint);
+            restartPoint = 0;
 
             String reply1;
-                reply1 = reader.readLine();
+            reply1 = reader.readLine();
 
             Integer.parseInt(reply1.substring(0, 3));
         }
         System.out.println(command);
         outputStream.println(command);
         String reply2;
-            reply2 = reader.readLine();
+        reply2 = reader.readLine();
 
         int response2 =Integer.parseInt(reply2.substring(0, 3));
 
@@ -267,7 +280,7 @@ public class Controller extends Component implements Initializable {
             //ip adress contains .
             ip = tokenizer.nextToken() + "." + tokenizer.nextToken() + "."
                     + tokenizer.nextToken() + "." + tokenizer.nextToken();
-           //calculate the port number
+            //calculate the port number
             port = Integer.parseInt(tokenizer.nextToken()) * 256
                     + Integer.parseInt(tokenizer.nextToken());
             data = new Socket(ip, port);
@@ -296,7 +309,7 @@ public class Controller extends Component implements Initializable {
             storeData(file);
         }
         //to add the new file to the list with size
-        listView.getItems().addAll("file                 " +filename +"\t   "+sizeSTOR(filename));
+        listView.getItems().addAll("*" +filename +"\t\t"+sizeSTOR(filename));
         listFiles();
     }
     //pour la 2eme list
@@ -312,7 +325,7 @@ public class Controller extends Component implements Initializable {
         if (filename != null) {
             storeData(file);
         }
-        sousList.getItems().addAll("file                 " +filename  + "\t   " +sizeSTOR(filename));
+        sousList.getItems().addAll("*" +filename +"\t\t"+sizeSTOR(filename));
         SouslistFiles();
     }
     //call the first list if the current directory is /
@@ -361,19 +374,19 @@ public class Controller extends Component implements Initializable {
 
         String input = JOptionPane.showInputDialog("new folder");
         //to create new filder send XMKD command
-     String re= send("XMKD "+input);
-     //if the folder name already exists
-         if (re.startsWith("550")){
-              text.setText("directory already exists");
-             }
+        String re= send("XMKD "+input);
+        //if the folder name already exists
+        if (re.startsWith("550")){
+            text1.setText("directory already exists");
+        }
     }
     public void newFold() throws IOException {
         //add the new folder in the sirst list if the current directory is /
         //else add it to the 2nd list
         if (pwd().startsWith("257 \"/\" is current directory.")){
-           newFolders();
-           listView.getItems().clear();
-           listFiles();
+            newFolders();
+            listView.getItems().clear();
+            listFiles();
 
         }else{
             newFolders();
@@ -386,7 +399,7 @@ public class Controller extends Component implements Initializable {
 
 
     public  void newFile() throws IOException {
-        text.setText("");
+        text1.setText("");
         String input=JOptionPane.showInputDialog("");
         openPasv();
         writerData = new BufferedWriter(new OutputStreamWriter(data.getOutputStream()));
@@ -394,7 +407,7 @@ public class Controller extends Component implements Initializable {
         String re=send("STOR " + input);
 
         if (re.startsWith("550")){
-            text.setText("files already exist");
+            text1.setText("files already exist");
         }
         listView.getItems().clear();
         listFiles();
@@ -404,14 +417,14 @@ public class Controller extends Component implements Initializable {
 
     }
     public  void newSousFile() throws IOException {
-        text.setText("");
+        text1.setText("");
         String input=JOptionPane.showInputDialog("");
         openPasv();
         writerData = new BufferedWriter(new OutputStreamWriter(data.getOutputStream()));
         inputStr = new BufferedInputStream(data.getInputStream());
         String re=send("STOR " + input);
         if (re.startsWith("550")){
-            text.setText("files already exist");
+            text1.setText("files already exist");
         }
         sousList.getItems().clear();
         SouslistFiles();
@@ -420,7 +433,7 @@ public class Controller extends Component implements Initializable {
         writerData.close();
 
     }
-//new file to create the file in the first list if the current directory is /
+    //new file to create the file in the first list if the current directory is /
     //else i'll create it in the second list
     public void newFiles() throws IOException {
         if (pwd().startsWith("257 \"/\" is current directory.")){
@@ -434,13 +447,13 @@ public class Controller extends Component implements Initializable {
     /*---------------------------------------------------------------------------------- Retreive date ---------------------------------------*/
 //to retreive file i use the RETR command
     public  void  retreiveFile( String file) throws IOException {
-        text.setText("");
+        text1.setText("");
         send("TYPE ASCII");
         openPasv();
         writerData = new BufferedWriter(new OutputStreamWriter(data.getOutputStream()));
         inputStr = new BufferedInputStream(data.getInputStream());
 
-       String re=send("RETR "+file);
+        String re=send("RETR "+file);
         System.out.println(re);
 
         RandomAccessFile outfile = new RandomAccessFile(file, "rw");
@@ -501,7 +514,7 @@ public class Controller extends Component implements Initializable {
                 Character.isDigit(reply1.charAt(2)) &&
                 reply1.charAt(3) == ' '));
         if (reply.startsWith("226")){
-            text.setText(fileName +" Successfully transfered "+"size "+reply1.substring(4));
+            text1.setText(fileName +" Successfully transfered "+" size "+reply1.substring(4));
         }
         return (reply1.substring(4));
 
@@ -512,6 +525,7 @@ public class Controller extends Component implements Initializable {
     public  void LIST() throws IOException {
         //if i am in the the /current directory i call calllist
         //else i will call callSousList
+        text1.setText("");
         if (pwd().startsWith("257 \"/\" is current directory.")){
             callList();
             listView.getItems().clear();
@@ -531,37 +545,57 @@ public class Controller extends Component implements Initializable {
         MenuItem deleteItem = new MenuItem();
         MenuItem downloadItem = new MenuItem();
         MenuItem renameItem = new MenuItem();
-        MenuItem back = new MenuItem();
+
 
         openItem.setText("open");
         deleteItem.setText("delete");
         downloadItem.setText("download");
         renameItem.setText("rename");
-        back.setText("back");
+
+        Image openIcon = new Image(getClass().getResourceAsStream("/pictures/open.png"));
+        ImageView openView = new ImageView(openIcon);
+        openView.setFitWidth(20);
+        openView.setFitHeight(20);
+        openItem.setGraphic(openView);
+        Image openIcon1 = new Image(getClass().getResourceAsStream("/pictures/delete.png"));
+        ImageView openView1 = new ImageView(openIcon1);
+        openView1.setFitWidth(20);
+        openView1.setFitHeight(20);
+        deleteItem.setGraphic(openView1);
+        Image openIcon2 = new Image(getClass().getResourceAsStream("/pictures/folder.png"));
+        ImageView openView2 = new ImageView(openIcon2);
+        openView2.setFitWidth(20);
+        openView2.setFitHeight(20);
+        downloadItem.setGraphic(openView2);
+        Image openIcon3 = new Image(getClass().getResourceAsStream("/pictures/edit.png"));
+        ImageView openView3 = new ImageView(openIcon3);
+        openView3.setFitWidth(20);
+        openView3.setFitHeight(20);
+        renameItem.setGraphic(openView3);
+
 // to change the directory so i use the CWD wommand
         openItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
 
                 String cwd = listView.getSelectionModel().getSelectedItem();
-                if (cwd.startsWith("directory")) {
-                    int index = cwd.indexOf("directory");
-                    int index1 = cwd.indexOf("\t");
-                    if (index != -1) {
-                        cwd = cwd.substring(17,index1);
-                        try {
-                            cwd(cwd);
-                            callSousList();
-                            contextMenu.hide();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } else if (cwd.startsWith("file")){
-                    int index = cwd.indexOf("file");
-                    if (index != -1) {
-                        contextMenu.hide();
+                if (cwd.contains("\t\t")) {
+                    contextMenu.hide();
 
-                    }
+                } else {
+                        if(cwd.startsWith("  ") ){
+                            int index1 = cwd.indexOf("\t");
+                                cwd = cwd.substring(2,index1);
+                                try {
+                                cwd(cwd);
+                                callSousList();
+
+                            } catch (IOException e) {
+                                    e.printStackTrace();
+
+                                }                            }
+
+
+
                 }
             }
         });
@@ -570,11 +604,10 @@ public class Controller extends Component implements Initializable {
             public void handle(ActionEvent t) {
 
                 String cwd = listView.getSelectionModel().getSelectedItem();
-                if (cwd.startsWith("directory")) {
-                    int index = cwd.indexOf("directory");
+                if (cwd.startsWith("  ")) {
                     int index1 = cwd.indexOf("\t");
-                    if (index != -1) {
-                        cwd = cwd.substring(17,index1);
+
+                        cwd = cwd.substring(2,index1);
                         try {
                             directories(cwd);
                             listView.getItems().clear();
@@ -584,15 +617,11 @@ public class Controller extends Component implements Initializable {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
-                        }
                     }
-                } else if (cwd.startsWith("file")){
-                    int index = cwd.indexOf("file");
-                    int index1 = cwd.indexOf("\t");
-
-                    if (index != -1) {
-                        cwd = cwd.substring(21,index1);
-                        try {
+                } else if (cwd.startsWith("*")){
+                    int index1 = cwd.indexOf("\t\t");
+                        cwd = cwd.substring(1,index1);
+                 try {
                             file(cwd);
                             listView.getItems().clear();
                             listFiles();
@@ -600,7 +629,7 @@ public class Controller extends Component implements Initializable {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }
+
                 }
             }
         });
@@ -609,20 +638,19 @@ public class Controller extends Component implements Initializable {
             public void handle(ActionEvent t) {
 
                 String cwd = listView.getSelectionModel().getSelectedItem();
-                if (cwd.startsWith("directory")) {
-                        contextMenu.hide();
-                } else if (cwd.startsWith("file")){
-                    int index = cwd.indexOf("file");
-                    int index1 = cwd.indexOf("\t");
-                    if (index != -1) {
-                        cwd = cwd.substring(21,index1);
+                if (cwd.startsWith("  ")) {
+                    contextMenu.hide();
+                } else if (cwd.startsWith("*")){
+                    int index1 = cwd.indexOf("\t\t");
+
+                        cwd = cwd.substring(1,index1);
                         try {
                             contextMenu.hide();
                             retreive(cwd);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }
+
                 }
             }
         });
@@ -633,30 +661,12 @@ public class Controller extends Component implements Initializable {
                 contextMenu.hide();
                 String input=JOptionPane.showInputDialog("rename : you must enter the extension");
 
-
                 String cwd = listView.getSelectionModel().getSelectedItem();
-                if (cwd.startsWith("directory")) {
-                    int index = cwd.indexOf("directory");
+                if (cwd.startsWith("  ")) {
                     int index1 = cwd.indexOf("\t");
-                    if (index != -1) {
-                     cwd = cwd.substring(17,index1);
-                         try {
-                             //the old name
-                             send("RNFR "+cwd);
-                             //the new name
-                             send("RNTO "+input);
-                             listView.getItems().clear();
-                             listFiles();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
 
-                    }
-                } else if (cwd.startsWith("file")){
-                    int index1 = cwd.indexOf("\t");
+                        cwd = cwd.substring(2,index1);
                         try {
-                            cwd = cwd.substring(21,index1);
-
                             //the old name
                             send("RNFR "+cwd);
                             //the new name
@@ -666,29 +676,31 @@ public class Controller extends Component implements Initializable {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-            }
-            }
-        });
-        // to return to the parent directory
-        back.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                contextMenu.hide();
-                try {
-                    parentDirectory();
-                    listView.getItems().clear();
-                    listFiles();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+
+
+                } else if (cwd.startsWith("*")){
+                    int index1 = cwd.indexOf("\t\t");
+                    try {
+                        cwd = cwd.substring(1,index1);
+
+                        //the old name
+                        send("RNFR "+cwd);
+                        //the new name
+                        send("RNTO "+input);
+                        listView.getItems().clear();
+                        listFiles();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
+
         contextMenu.getItems().add(openItem);
         contextMenu.getItems().add(deleteItem);
         contextMenu.getItems().add(downloadItem);
         contextMenu.getItems().add(renameItem);
-        contextMenu.getItems().add(back);
+
 
         EventHandler<WindowEvent> event= new EventHandler<WindowEvent>() {
             @Override
@@ -703,31 +715,49 @@ public class Controller extends Component implements Initializable {
 
 
     }
- public void callSousList(){
+    public void callSousList(){
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem openItem = new MenuItem();
         MenuItem deleteItem = new MenuItem();
         MenuItem downloadItem = new MenuItem();
         MenuItem renameItem = new MenuItem();
-        MenuItem back = new MenuItem();
 
-       openItem.setText("open");
+        openItem.setText("open");
         deleteItem.setText("delete");
         downloadItem.setText("download");
         renameItem.setText("rename");
-        back.setText("back");
-         // to change the current directory
-       openItem.setOnAction(new EventHandler<ActionEvent>() {
+
+        Image openIcon = new Image(getClass().getResourceAsStream("/pictures/open.png"));
+        ImageView openView = new ImageView(openIcon);
+        openView.setFitWidth(20);
+        openView.setFitHeight(20);
+        openItem.setGraphic(openView);
+        Image openIcon1 = new Image(getClass().getResourceAsStream("/pictures/delete.png"));
+        ImageView openView1 = new ImageView(openIcon1);
+        openView1.setFitWidth(20);
+        openView1.setFitHeight(20);
+        deleteItem.setGraphic(openView1);
+        Image openIcon2 = new Image(getClass().getResourceAsStream("/pictures/folder.png"));
+        ImageView openView2 = new ImageView(openIcon2);
+        openView2.setFitWidth(20);
+        openView2.setFitHeight(20);
+        downloadItem.setGraphic(openView2);
+        Image openIcon3 = new Image(getClass().getResourceAsStream("/pictures/edit.png"));
+        ImageView openView3 = new ImageView(openIcon3);
+        openView3.setFitWidth(20);
+        openView3.setFitHeight(20);
+        renameItem.setGraphic(openView3);
+
+        // to change the current directory
+        openItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
 
                 String cwd = sousList.getSelectionModel().getSelectedItem();
-                if (cwd.startsWith("directory")) {
-                    int index = cwd.indexOf("directory");
+                if (cwd.startsWith("  ")) {
                     int index1 = cwd.indexOf("\t");
 
-                    if (index != -1) {
-                        cwd = cwd.substring(17,index1);
+                        cwd = cwd.substring(2,index1);
                         try {
                             cwd(cwd);
                             callSousList();
@@ -736,138 +766,114 @@ public class Controller extends Component implements Initializable {
                             e.printStackTrace();
                         }
                     }
-                } else if (cwd.startsWith("file")){
-                    int index = cwd.indexOf("file");
-                    if (index != -1) {
-                        contextMenu.hide();
-                    }
+                 else {
+
+                    contextMenu.hide();
+                }
                 }
 
-            }
         });
 //to delete file or folder
-     deleteItem.setOnAction(new EventHandler<ActionEvent>() {
-         public void handle(ActionEvent t) {
-
-             String cwd = sousList.getSelectionModel().getSelectedItem();
-             if (cwd.startsWith("directory")) {
-                 int index = cwd.indexOf("directory");
-                 int index1 = cwd.indexOf("\t");
-
-                 if (index != -1) {
-                     cwd = cwd.substring(17,index1);
-                     try {
-                         directories(cwd);
-                         sousList.getItems().clear();
-                         SouslistFiles();
-                         contextMenu.hide();
-                     } catch (IOException e) {
-                         e.printStackTrace();
-                     } catch (InterruptedException e) {
-                         e.printStackTrace();
-                     }
-                 }
-             } else if (cwd.startsWith("file")){
-                 int index = cwd.indexOf("file");
-                 int index1 = cwd.indexOf("\t");
-
-                 if (index != -1) {
-                     cwd = cwd.substring(21,index1);
-                     try {
-
-                         file(cwd);
-                         sousList.getItems().clear();
-                         SouslistFiles();
-                         contextMenu.hide();
-                     } catch (IOException e) {
-                         e.printStackTrace();
-                     }
-                 }
-             }
-         }
-     });
-     //to retre file from the server
-       downloadItem.setOnAction(new EventHandler<ActionEvent>() {
+        deleteItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
 
                 String cwd = sousList.getSelectionModel().getSelectedItem();
-                if (cwd.startsWith("directory")) {
-                        contextMenu.hide();
-                } else if (cwd.startsWith("file")){
-                    int index = cwd.indexOf("file");
+                if (cwd.startsWith("  ")) {
                     int index1 = cwd.indexOf("\t");
-                    if (index != -1) {
-                        cwd = cwd.substring(21,index1);
+                    System.out.println("dkhal hna");
+                        cwd = cwd.substring(2,index1);
+                        try {
+                            directories(cwd);
+                            sousList.getItems().clear();
+                            SouslistFiles();
+                            contextMenu.hide();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                    }
+                }
+                if(cwd.startsWith("*")) {
+                    int index1 = cwd.indexOf("\t\t");
+
+                        cwd = cwd.substring(1,index1);
+
+                    try {
+                            file(cwd);
+                            sousList.getItems().clear();
+                            SouslistFiles();
+                            contextMenu.hide();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+            }
+        });
+        //to retre file from the server
+        downloadItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+
+                String cwd = sousList.getSelectionModel().getSelectedItem();
+                if (cwd.startsWith("  ")) {
+                    contextMenu.hide();
+                } else if (cwd.startsWith("*")) {
+                    int index1 = cwd.indexOf("\t");
+                        cwd = cwd.substring(1,index1);
                         try { contextMenu.hide();
                             retreiveFile(cwd);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }
-
                 }
             }
         });
-       //to rename i file or directory
-     renameItem.setOnAction(new EventHandler<ActionEvent>() {
-         public void handle(ActionEvent t) {
-             contextMenu.hide();
-             String input=JOptionPane.showInputDialog("rename : you must enter the extension");
+        //to rename i file or directory
+        renameItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                contextMenu.hide();
+                String input=JOptionPane.showInputDialog("rename : you must enter the extension");
 
 
-             String cwd = sousList.getSelectionModel().getSelectedItem();
-             if (cwd.startsWith("directory")) {
-                 int index = cwd.indexOf("directory");
-                 int index1 = cwd.indexOf("\t");
-                 if (index != -1) {
-                     cwd = cwd.substring(17,index1);
-                     try {
-                         //the old name
-                         send("RNFR "+cwd);
-                         //the new name
-                         send("RNTO "+input);
-                         sousList.getItems().clear();
-                         SouslistFiles();
-                     } catch (IOException e) {
-                         e.printStackTrace();
-                     }
+                String cwd = sousList.getSelectionModel().getSelectedItem();
+                if (cwd.startsWith("  ")) {
+                    int index1 = cwd.indexOf("\t");
 
-                 }
-             } else if (cwd.startsWith("file")){
-                 int index1 = cwd.indexOf("\t");
-                 try {
-                     cwd = cwd.substring(21,index1);
+                        cwd = cwd.substring(2,index1);
+                        try {
+                            //the old name
+                            send("RNFR "+cwd);
+                            //the new name
+                            send("RNTO "+input);
+                            sousList.getItems().clear();
+                            SouslistFiles();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
-                     //the old name
-                     send("RNFR "+cwd);
-                     //the new name
-                     send("RNTO "+input);
-                     sousList.getItems().clear();
-                     SouslistFiles();
-                 } catch (IOException e) {
-                     e.printStackTrace();
-                 }
-             }
-         }
-     });
-//to return to the parent
-     back.setOnAction(new EventHandler<ActionEvent>() {
-         public void handle(ActionEvent t) {
-             contextMenu.hide();
-             try {
-                 parentDirectory();
-             } catch (IOException e) {
-                 e.printStackTrace();
-             } catch (InterruptedException e) {
-                 e.printStackTrace();
-             }
-         }
-     });
-     contextMenu.getItems().add(openItem);
+                } else if (cwd.startsWith("*")){
+
+                    int index = cwd.indexOf("\t");
+                    try {
+                        cwd = cwd.substring(1,index);
+
+                        //the old name
+                        send("RNFR "+cwd);
+                        //the new name
+                        send("RNTO "+input);
+                        sousList.getItems().clear();
+                        SouslistFiles();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        contextMenu.getItems().add(openItem);
         contextMenu.getItems().add(deleteItem);
         contextMenu.getItems().add(downloadItem);
         contextMenu.getItems().add(renameItem);
-        contextMenu.getItems().add(back);
+
 
         EventHandler<WindowEvent> event= new EventHandler<WindowEvent>() {
             @Override
@@ -877,7 +883,7 @@ public class Controller extends Component implements Initializable {
         };
         contextMenu.setOnShowing(event);
         contextMenu.setOnHiding(event);
-         sousList.setContextMenu(contextMenu);
+        sousList.setContextMenu(contextMenu);
     }
 
     private  String listFiles()
@@ -911,27 +917,49 @@ public class Controller extends Component implements Initializable {
         StringTokenizer sList = new StringTokenizer(shortList, "\n");
         StringTokenizer lList = new StringTokenizer(longList, "\n");
 
-        String sString;
-        String lString;
-
         // A not� que les deux lists ont le m�me nombre de ligne.
         while ((sList.hasMoreTokens()) && (lList.hasMoreTokens())) {
-            sString = sList.nextToken();
-            lString = lList.nextToken();
+            String sString = sList.nextToken();
+            String lString = lList.nextToken();
 
-            if (lString.length() > 0)
-            {
-                if (lString.startsWith("d"))
-                {
-                    listView.getItems().addAll( "directory        " +sString.trim() +"\t\t");
+            if (lString.length() > 0) {
+                if (lString.startsWith("d")) {
+                    String no="  " + sString.trim()+"\t" ;
+                    listView.getItems().addAll(no);
+                } else if (lString.startsWith("-")) {
+                    String no="*"+ sString.trim() + "\t\t                 " + sizeSTOR(sString);
+                    listView.getItems().addAll(no);
+                }
 
+
+                listView.setCellFactory(param -> new ListCell<String>() {
+                    private ImageView imageView = new ImageView();
+
+                    @Override
+                    public void updateItem(String name, boolean empty) {
+                        super.updateItem(name, empty);
+                        System.out.println(name);
+                        if (empty) {
+                            setText(null);
+                            setGraphic(null);
+                        }  else if (name.contains("\t\t")) {
+                            imageView.setImage(listOfImages[1]);
+                            imageView.setFitHeight(40);
+                            imageView.setFitWidth(40);
+                            setText(name);
+                            setGraphic(imageView);
+                        }else {
+                            imageView.setImage(listOfImages[0]);
+                            imageView.setFitHeight(40);
+                            imageView.setFitWidth(40);
+                            setText(name);
+                            setGraphic(imageView);
+                        }
                     }
-                else if (lString.startsWith("-"))
-                {
-                    listView.getItems().addAll("file                 "+sString.trim() +"\t\t"+ sizeSTOR(sString));
-  }
 
+                });
             }
+
         }
 
         if (files.length() > 0)  {  files.setLength(files.length() - "\n".length());  }
@@ -972,26 +1000,47 @@ public class Controller extends Component implements Initializable {
         StringTokenizer sList = new StringTokenizer(shortList, "\n");
         StringTokenizer lList = new StringTokenizer(longList, "\n");
 
-        String sString;
-        String lString;
 
         while ((sList.hasMoreTokens()) && (lList.hasMoreTokens())) {
-            sString = sList.nextToken();
-            lString = lList.nextToken();
+            String sString = sList.nextToken();
+            String lString = lList.nextToken();
+            if (lString.length() > 0) {
+                if (lString.startsWith("d")) {
+                    String no="  " + sString.trim() +"\t";
+                    sousList.getItems().addAll(no);
+                } else if (lString.startsWith("-")) {
+                    String no="*"+ sString.trim() + "\t\t                 " + sizeSTOR(sString);
+                    sousList.getItems().addAll(no);
+                }
 
-            if (lString.length() > 0)
-            {
-                if (lString.startsWith("d"))
-                {
-                    sousList.getItems().addAll( "directory        " +sString.trim()+"\t  " );
-                }
-                else if (lString.startsWith("-"))
-                {
-                    sousList.getItems().addAll("file                 "+sString.trim()+"\t  "+sizeSTOR(sString)  );
-                }
+
+                sousList.setCellFactory(param -> new ListCell<String>() {
+                    private ImageView imageView = new ImageView();
+
+                    @Override
+                    public void updateItem(String name, boolean empty) {
+                        super.updateItem(name, empty);
+                        System.out.println(name);
+                        if (empty) {
+                            setText(null);
+                            setGraphic(null);
+                        }  else if (name.contains("\t\t")) {
+                            imageView.setImage(listOfImages[1]);
+                            imageView.setFitHeight(40);
+                            imageView.setFitWidth(40);
+                            setText(name);
+                            setGraphic(imageView);
+                        }else if(name.contains("\t")){
+                            imageView.setImage(listOfImages[0]);
+                            imageView.setFitHeight(40);
+                            imageView.setFitWidth(40);
+                            setText(name);
+                            setGraphic(imageView);
+                        }
+                    }
+                });
             }
         }
-
         if (files.length() > 0)  {  files.setLength(files.length() - "\n".length());  }
         if (dirs.length() > 0)  {  dirs.setLength(dirs.length() - "\n".length());  }
 
@@ -1018,25 +1067,22 @@ public class Controller extends Component implements Initializable {
         }
     }
 
-    /*----------------------------------- parent directory -----------------------------*/
-    public void  parentDirectory() throws IOException, InterruptedException {
-        send("CDUP");
-        sousList.getItems().clear();
-        listView.getItems().clear();
-        listFiles();
-    }
+
     /*----------------------------------------- pwd ---------------------------------*/
     public  String pwd()throws IOException
     {
+        text.setText("");
         String response = getExecutionResponse("pwd");
         System.out.println(response);
+        int in=response.indexOf("is");
+        text.setText(response.substring(4,in));
         return response;
     }
 
     /*---------------------------- cwd------------------*/
 
     public String cwd(String filename) throws IOException {
-
+        text.setText("");
         outputStream.println("cwd "+filename);
         String reply;
         do {
@@ -1055,7 +1101,11 @@ public class Controller extends Component implements Initializable {
             listView.getItems().clear();
             listView.getItems().addAll(filename);
         }
-
+        int in=reply.indexOf("is");
+        int indexOf=reply.indexOf("successful.");
+        int indexOf1=reply.indexOf("successful.");
+       // String in=reply.substring(14);
+        text.setText(reply.substring(19,in));
         return (reply);
 
     }
@@ -1071,5 +1121,15 @@ public class Controller extends Component implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+    }
+    /*----------------------------------- parent directory -----------------------------*/
+
+    public void back(ActionEvent actionEvent) throws IOException {
+        text.setText("");
+        send("CDUP");
+        sousList.getItems().clear();
+        listView.getItems().clear();
+        listFiles();
+
     }
 }

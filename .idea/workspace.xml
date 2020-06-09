@@ -1,7 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="" />
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/pictures/confidential.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/pictures/doc.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/pictures/dossier.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/pictures/download.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/pictures/ftp.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/pictures/lock.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/pictures/move.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$10.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$10.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$11.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$11.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$12.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$12.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$7.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$8.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller$9.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tpReseau2/sample/Controller.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tpReseau2/sample/principalePage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tpReseau2/sample/principalePage.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pictures/confidential.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pictures/doc.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pictures/dossier.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pictures/download.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pictures/ftp.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pictures/lock.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pictures/move.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/homePage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/homePage.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/principalePage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/principalePage.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample.fxml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,8 +102,12 @@
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectId" id="1ca1HC58m5U7znNoYWNfJYeddlz" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectReloadState">
     <option name="STATE" value="0" />
   </component>
@@ -82,7 +121,7 @@
     <property name="OverrideImplement.combined" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="dynamic.classpath" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../tpReseau" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -253,6 +292,19 @@
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.css" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
