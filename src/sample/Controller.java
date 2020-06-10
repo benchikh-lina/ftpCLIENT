@@ -1,8 +1,6 @@
 package sample;
 
 import java.awt.*;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
 import java.io.*;
 import java.net.Socket;
 import java.net.URL;
@@ -33,16 +31,11 @@ public class Controller extends Component implements Initializable {
     public static Socket socket;
     public static Socket data;
     public static PrintStream outputStream;
-    public static BufferedReader reader;
-    private static BufferedInputStream inputStr;
-    private static  BufferedWriter writer, writerData;
-    public static long restartPoint = 0L;
 
+    private final Image file_image = new Image("/pictures/file.png");
+    private final Image document_image = new Image("pictures/documents.png");
 
-    private final Image IMAGE_RUBY  = new Image("/pictures/file.png");
-    private final Image IMAGE_APPLE  = new Image("pictures/documents.png");
-
-    private Image[] listOfImages = {IMAGE_RUBY, IMAGE_APPLE};
+    private Image[] listOfImages = {file_image, document_image};
 
     //pour le login recupere le nom quand on va sisait dans le champ username
     @FXML
@@ -51,6 +44,10 @@ public class Controller extends Component implements Initializable {
     //pour le login recupere le password quand on va sisait dans le champ username
     @FXML
     public   PasswordField inpPassword;
+
+    private static  BufferedWriter  writer,writerData;
+
+    public static long restartPoint = 0L;
 
     //pour les messages d'erreurs de la login interface
     @FXML
@@ -62,6 +59,10 @@ public class Controller extends Component implements Initializable {
  //pour les messages de cwd
     @FXML
     public Text text;
+
+    public static BufferedReader reader;
+
+    private static BufferedInputStream inputStr;
 
     //pour recuperer la list quelle est dans le fxml
     @FXML
@@ -87,14 +88,12 @@ public class Controller extends Component implements Initializable {
             error.setText("verifier le champ de username ou de mot de passe the musn't be empty");
         }else{
             String response = send("user " + username);
-            System.out.println(response);
             if (response.startsWith("331")) {
                 error.setText("Password required for "+username);
             } else if(response.startsWith("530")) {
                 error.setText("Login or password incorrect!");
             }
             response = send("pass " + pass);
-            System.out.println(response);
             if(response.startsWith("331")) {
                 error.setText("password don't march with the username");
             }  else if(response.startsWith("530")) {
@@ -191,7 +190,6 @@ public class Controller extends Component implements Initializable {
 
     public static String getExecutionResponse(String command)throws IOException
     {
-        System.out.println(command);
         outputStream.println(command);
         String reply;
         reply = reader.readLine();
@@ -233,16 +231,7 @@ public class Controller extends Component implements Initializable {
         String reply;
         reply = reader.readLine();
 
-
-        int response=Integer.parseInt(reply.substring(0, 3));
-        if (!(response >= 200 && response < 300))
-        {
-            System.out.println("Could not set transfer type");
-
-            return false;
-        }
         if (restartPoint != 0) {
-            System.out.println("rest " + restartPoint);
             outputStream.println("rest " + restartPoint);
             restartPoint = 0;
 
@@ -251,7 +240,6 @@ public class Controller extends Component implements Initializable {
 
             Integer.parseInt(reply1.substring(0, 3));
         }
-        System.out.println(command);
         outputStream.println(command);
         String reply2;
         reply2 = reader.readLine();
@@ -454,7 +442,6 @@ public class Controller extends Component implements Initializable {
         inputStr = new BufferedInputStream(data.getInputStream());
 
         String re=send("RETR "+file);
-        System.out.println(re);
 
         RandomAccessFile outfile = new RandomAccessFile(file, "rw");
         // On lance un restart si d�sir�
@@ -780,7 +767,6 @@ public class Controller extends Component implements Initializable {
                 String cwd = sousList.getSelectionModel().getSelectedItem();
                 if (cwd.startsWith("  ")) {
                     int index1 = cwd.indexOf("\t");
-                    System.out.println("dkhal hna");
                         cwd = cwd.substring(2,index1);
                         try {
                             directories(cwd);
@@ -938,7 +924,6 @@ public class Controller extends Component implements Initializable {
                     @Override
                     public void updateItem(String name, boolean empty) {
                         super.updateItem(name, empty);
-                        System.out.println(name);
                         if (empty) {
                             setText(null);
                             setGraphic(null);
@@ -1020,7 +1005,6 @@ public class Controller extends Component implements Initializable {
                     @Override
                     public void updateItem(String name, boolean empty) {
                         super.updateItem(name, empty);
-                        System.out.println(name);
                         if (empty) {
                             setText(null);
                             setGraphic(null);
@@ -1073,7 +1057,6 @@ public class Controller extends Component implements Initializable {
     {
         text.setText("");
         String response = getExecutionResponse("pwd");
-        System.out.println(response);
         int in=response.indexOf("is");
         text.setText(response.substring(4,in));
         return response;
@@ -1092,7 +1075,6 @@ public class Controller extends Component implements Initializable {
                 Character.isDigit(reply.charAt(2)) &&
                 reply.charAt(3) == ' '));
 
-        System.out.println(reply);
 
         if (reply.startsWith("550")) System.out.println(" isn't a directory ");
         else{
